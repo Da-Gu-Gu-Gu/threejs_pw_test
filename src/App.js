@@ -1,13 +1,17 @@
 import React from 'react'
 import ThreeCanva from './components/ThreeCanva'
+import './App.css'
 
 const App = () => {
   return (
     <div>
-      aa
+     
       <ThreeCanva/>
     </div>
   )
 }
 
 export default App
+
+
+
