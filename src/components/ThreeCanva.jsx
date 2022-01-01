@@ -1,5 +1,4 @@
 import React,{useEffect, useRef } from 'react'
-import ReactDOM from "react-dom"
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -13,15 +12,17 @@ const ThreeCanva = () => {
   // scene.fog = new THREE.Fog(0x0000ff, 1, 25)
  
   scene.background = new THREE.Color(0xffffff)
-  console.log(scene)
+ 
 
 
   //render
   const renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  // renderer.setClearColor(0x0000ff)
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFShadowMap
+  // renderer.toneMapping=THREE.ReinhardToneMapping
+  // renderer.toneMappingExposure=1
+  renderer.setClearColor(0xffffff)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.outputEncoding = THREE.sRGBEncoding
   montRef.current.appendChild(renderer.domElement)
@@ -33,12 +34,15 @@ const ThreeCanva = () => {
 
 
 //lights
-const ambientLight=new THREE.AmbientLight(0xffffff,0.7)
+const ambientLight=new THREE.AmbientLight(0xffffff,0.5)
 scene.add(ambientLight)
 
 const pointLight = new THREE.PointLight( 0xffffff, 1, 1000 );
-pointLight.position.set( 0, 10, 0 );
+pointLight.position.set( -10, 30, 20 );
 pointLight.castShadow = true;
+pointLight.shadow.bias = -0.0001;
+pointLight.shadow.mapSize.width = 1024*4;
+pointLight.shadow.mapSize.height = 1024*4;
 scene.add( pointLight );
 
 // load model
@@ -48,19 +52,24 @@ scene.add( pointLight );
  
     gltf.scene.position.set(0,-1,1.5)
     gltf.scene.scale.set(0.25,0.25,0.25)
-    gltf.scene.castShadow = true; 
+    gltf.scene.traverse( function( node ) {
+
+      if ( node.isMesh ) { node.castShadow = true; }
+
+  } );
     console.log(gltf.scene)
+    console.log(gltf.scene.children)
     scene.add(gltf.scene)
   })
 
   //plane
   
-  // const PlaneGeo=new THREE.PlaneGeometry(20000,20000)
-  const PlaneGeo= new THREE.CircleGeometry( 3, 64 );
+  // const PlaneGeo=new THREE.PlaneGeometry(5,5)
+  const PlaneGeo= new THREE.CircleGeometry( 2.8, 64 );
   const PlaneMaterial=new THREE.MeshStandardMaterial({
     color:0xffffff,
-    metalness:0.4,
-    roughness:0.2,
+    // metalness:1.0,
+    roughness:0.0,
 
   })
   const Plane=new THREE.Mesh(PlaneGeo,PlaneMaterial)
@@ -76,9 +85,11 @@ scene.add( pointLight );
 
   
   // var geometry = new THREE.BoxGeometry();
-  // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  // var material = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
+
   // var cube = new THREE.Mesh( geometry, material );
 
+  // cube.castShadow=true
   // scene.add( cube );
   
 //helper
@@ -97,7 +108,7 @@ scene.add( pointLightHelper );
   controls.maxDistance = 50000
   controls.autoRotate=true
   controls.enableZoom=false
-  controls.autoRotateSpeed=5
+  controls.autoRotateSpeed=6
 
 
   const clock = new THREE.Clock()
