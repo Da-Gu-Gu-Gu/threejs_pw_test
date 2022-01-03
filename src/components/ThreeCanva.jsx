@@ -2,6 +2,9 @@ import React,{useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { ScrollTrigger,gsap } from 'gsap/all'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const ThreeCanva = () => {
 
@@ -20,8 +23,6 @@ const ThreeCanva = () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFShadowMap
-  // renderer.toneMapping=THREE.ReinhardToneMapping
-  // renderer.toneMappingExposure=1
   renderer.setClearColor(0xffffff)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.outputEncoding = THREE.sRGBEncoding
@@ -32,7 +33,7 @@ const ThreeCanva = () => {
   camera.position.set(0,5,3)
   scene.add(camera)
 
-
+ 
 //lights
 const ambientLight=new THREE.AmbientLight(0xffffff,0.5)
 scene.add(ambientLight)
@@ -48,27 +49,23 @@ scene.add( pointLight );
 // load model
   const loader=new GLTFLoader()
 
+  var gltfObject
   loader.load('/l.glb',(gltf)=>{
- 
-    gltf.scene.position.set(0,-1,1.5)
-    gltf.scene.scale.set(0.25,0.25,0.25)
-    gltf.scene.traverse( function( node ) {
-
+    gltfObject=gltf
+    gltfObject.scene.position.set(0,-1,1.5)
+    gltfObject.scene.scale.set(0.25,0.25,0.25)
+    gltfObject.scene.traverse( function( node ) {
+      
       if ( node.isMesh ) { node.castShadow = true; }
 
   } );
-    console.log(gltf.scene)
-    console.log(gltf.scene.children)
-    scene.add(gltf.scene)
+    scene.add(gltfObject.scene)
   })
 
-  //plane
-  
-  // const PlaneGeo=new THREE.PlaneGeometry(5,5)
+  //Circle
   const PlaneGeo= new THREE.CircleGeometry( 2.8, 64 );
   const PlaneMaterial=new THREE.MeshStandardMaterial({
     color:0xffffff,
-    // metalness:1.0,
     roughness:0.0,
 
   })
@@ -84,20 +81,22 @@ scene.add( pointLight );
 
 
   
-  // var geometry = new THREE.BoxGeometry();
-  // var material = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
+  var geometry = new THREE.BoxGeometry();
+  var material = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
 
-  // var cube = new THREE.Mesh( geometry, material );
+  var cube = new THREE.Mesh( geometry, material );
 
-  // cube.castShadow=true
-  // scene.add( cube );
+  cube.castShadow=true 
+  cube.position.set(-5,-20,8)
+  scene.add( cube );
   
 //helper
-  // const axesHelper = new THREE.AxesHelper(5)
-  // scene.add(axesHelper)
-  const sphereSize = 1;
-const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-scene.add( pointLightHelper );  
+  const axesHelper = new THREE.AxesHelper(5)
+  scene.add(axesHelper)
+
+
+//Gsap
+gsap.to(camera.position,{y:-12})
 
   // controls
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -106,21 +105,25 @@ scene.add( pointLightHelper );
   controls.minPolarAngle = Math.PI/2
   controls.minDistance = 1
   controls.maxDistance = 50000
-  controls.autoRotate=true
+  // controls.autoRotate=true
   controls.enableZoom=false
-  controls.autoRotateSpeed=6
+  // controls.autoRotateSpeed=6
 
-
+console.log(scene)
   const clock = new THREE.Clock()
   function animate() {
     const elapsedTime = clock.getElapsedTime()
 
-    // camera.rotation.x+=elapsedTime
+    // camera.rotation.z+=2
+    if(gltfObject){
+      gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
+      }
     controls.update()
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
   }
   animate();
+
 
   //resize
   window.addEventListener('resize', () => {
@@ -133,7 +136,7 @@ scene.add( pointLightHelper );
 },[])
 
   return (
-    <div ref={montRef}></div>
+    <div ref={montRef} ></div>
   )
 }
 

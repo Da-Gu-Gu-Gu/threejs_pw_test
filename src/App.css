@@ -1,4 +1,29 @@
-html,body,Canvas{
-  width: 100%;
-  height: 100%;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.page {
+  border:1px solid red;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  display: grid;
+  /* place-items: center; */
+  /* scroll-snap-align: center; */
+  /* user-select: none; */
+}
+/* 
+.page{
+  width:100vw;
+  height: 100vh;
+	position: relative;
+	z-index: 2;
+  border:1px solid blue;
+} */
