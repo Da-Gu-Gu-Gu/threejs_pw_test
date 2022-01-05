@@ -8,10 +8,13 @@ import Third from './components/Third'
 const App = () => {
   return (
     <div>
+      <div>
       <ThreeCanva/>
+  </div>
       <First/>
       <Second/>
       <Third/>
+  
     </div>
   )
 }

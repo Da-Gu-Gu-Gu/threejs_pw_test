@@ -2,7 +2,7 @@ import React from 'react'
 
 const First = () => {
     return (
-        <div className='page'>
+        <div className='section'>
             First
         </div>
     )

@@ -2,6 +2,8 @@ import React,{useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { ScrollTrigger,gsap } from 'gsap/all'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -46,8 +48,15 @@ pointLight.shadow.mapSize.width = 1024*4;
 pointLight.shadow.mapSize.height = 1024*4;
 scene.add( pointLight );
 
+//loadingManager
+const manager = new THREE.LoadingManager();
+// manager.onLoad=()=>{
+//   console.log('complete')
+//   // scrollAnime()
+// }
+
 // load model
-  const loader=new GLTFLoader()
+  const loader=new GLTFLoader(manager)
 
   var gltfObject
   loader.load('/l.glb',(gltf)=>{
@@ -63,43 +72,100 @@ scene.add( pointLight );
   })
 
   //Circle
-  const PlaneGeo= new THREE.CircleGeometry( 2.8, 64 );
-  const PlaneMaterial=new THREE.MeshStandardMaterial({
+  const CircleGeo= new THREE.CircleGeometry( 2.8, 64 );
+  const CircleMaterial=new THREE.MeshStandardMaterial({
     color:0xffffff,
     roughness:0.0,
 
   })
-  const Plane=new THREE.Mesh(PlaneGeo,PlaneMaterial)
+  const Circle=new THREE.Mesh(CircleGeo,CircleMaterial)
 
-  Plane.position.set(0,-1,0)
-  Plane.rotation.x=-Math.PI*0.5
-  Plane.castShadow = false
-  Plane.receiveShadow = true 
-  scene.add(Plane)
+  Circle.position.set(0,-1,0)
+  Circle.rotation.x=-Math.PI*0.5
+  Circle.castShadow = false
+  Circle.receiveShadow = true 
+  scene.add(Circle)
+
+    
+  //text
+  const textLoader = new FontLoader();
+
+  textLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+  
+    const textGeo = new TextGeometry( 'Hello three.js!', {
+      font: font,
+      size: 80,
+      height: 5,
+      curveSegments: 12,
+      bevelEnabled: true,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelOffset: 0,
+      bevelSegments: 5
+    } )
+
+    const textMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffe502,
+      specular: 0x009900,
+      shininess: 30,
+      shading: THREE.FlatShading
+  });
+  const Text = new THREE.Mesh(textGeo, textMaterial);
+  Text.castShadow = true
+  scene.add(Text)
+  } )
+
+
 
   
+  var geometry = new THREE.PlaneGeometry(10,10);
+  var material = new THREE.MeshStandardMaterial( { 
+    color: 0x0f0f000,
+  } );
 
+  var plane = new THREE.Mesh( geometry, material );
 
-  
-  var geometry = new THREE.BoxGeometry();
-  var material = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
-
-  var cube = new THREE.Mesh( geometry, material );
-
-  cube.castShadow=true 
-  cube.position.set(-5,-20,8)
-  scene.add( cube );
+  plane.castShadow=true 
+  plane.rotation.x=Math.PI*0.5
+  // plane.rotation.x=0
+  plane.position.set(0,-1,-8)
+  scene.add( plane )
   
 //helper
   const axesHelper = new THREE.AxesHelper(5)
   scene.add(axesHelper)
 
+  // const cameraHelper=new THREE.CameraHelper(5)
+  // scene.add(cameraHelper)
+
+  function lerp(x, y, a) {
+    return (1 - a) * x + a * y
+}
 
 //Gsap
-gsap.to(camera.position,{y:-12})
+  const tl=gsap.timeline({
+    scrollTrigger:{
+      trigger:'.section2',
+      start:'top center',
+      end:'bottom bottom',
+      markers:true,
+      scrub:true,
+      onEnter:(()=>console.log('enter')),
+      onLeave:(()=>console.log('leave'))
+    }
+  })
+ 
+
+ 
+  tl.to(camera.position,{z:-11,ease:'power4.easeIn'})
+  tl.to(plane.rotation,{x:-Math.PI*1})
+  tl.to(camera.lookAt,{x:0,y:-1,z:-8,ease:'power4.easeIn'})
+
+
 
   // controls
   const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enabled=false
   controls.enableDamping = true
   controls.maxPolarAngle = Math.PI/3
   controls.minPolarAngle = Math.PI/2
@@ -107,7 +173,7 @@ gsap.to(camera.position,{y:-12})
   controls.maxDistance = 50000
   // controls.autoRotate=true
   controls.enableZoom=false
-  // controls.autoRotateSpeed=6
+  controls.autoRotateSpeed=6
 
 console.log(scene)
   const clock = new THREE.Clock()
