@@ -3,7 +3,7 @@ import React from 'react'
 const First = () => {
     return (
         <div className='section'>
-            First
+            {/* First */}
         </div>
     )
 }

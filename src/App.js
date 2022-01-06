@@ -6,15 +6,14 @@ import Second from './components/Second'
 import Third from './components/Third'
 
 const App = () => {
+
   return (
     <div>
-      <div>
-      <ThreeCanva/>
-  </div>
+    
       <First/>
       <Second/>
       <Third/>
-  
+      <ThreeCanva/>
     </div>
   )
 }

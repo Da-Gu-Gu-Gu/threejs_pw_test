@@ -2,9 +2,11 @@ import React,{useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
+// import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+// import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { ScrollTrigger,gsap } from 'gsap/all'
+
+
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -50,10 +52,7 @@ scene.add( pointLight );
 
 //loadingManager
 const manager = new THREE.LoadingManager();
-// manager.onLoad=()=>{
-//   console.log('complete')
-//   // scrollAnime()
-// }
+
 
 // load model
   const loader=new GLTFLoader(manager)
@@ -88,47 +87,49 @@ const manager = new THREE.LoadingManager();
 
     
   //text
-  const textLoader = new FontLoader();
-
-  textLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+  // const textLoader = new FontLoader();
+  // const fontFamily=require('three/examples/fonts/helvetiker_regular.typeface.json')
+  // const FONT=new Font(fontFamily)
+  // // textLoader.load('three/examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
   
-    const textGeo = new TextGeometry( 'Hello three.js!', {
-      font: font,
-      size: 80,
-      height: 5,
-      curveSegments: 12,
-      bevelEnabled: true,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelOffset: 0,
-      bevelSegments: 5
-    } )
+  //   const textGeo = new TextGeometry( 'Hello three.js!', {
+  //     font: FONT,
+  //     size: 2,
+  //     height: 1,
+  //     curveSegments: 1,
+  //     // bevelEnabled: true,
+  //     // bevelThickness: 1,
+  //     // bevelSize:1,
+  //     // bevelOffset: 0,
+  //     // bevelSegments: 1
+  //   } )
 
-    const textMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffe502,
-      specular: 0x009900,
-      shininess: 30,
-      shading: THREE.FlatShading
-  });
-  const Text = new THREE.Mesh(textGeo, textMaterial);
-  Text.castShadow = true
-  scene.add(Text)
-  } )
+  //   const textMaterial = new THREE.MeshPhongMaterial({
+  //     color: 0xff0000,
+  //     specular: 0x009900,
+  //     shininess: 30,
+  //     flatShading:true
+  // });
+  // const Text = new THREE.Mesh(textGeo, textMaterial);
+  // Text.castShadow = true
+  // Text.position.set(0,0,-3)
+  // Text.rotation.y=Math.PI
+  // scene.add(Text)
+  // // } )
 
 
 
   
-  var geometry = new THREE.PlaneGeometry(10,10);
+  var geometry = new THREE.PlaneGeometry(14,6);
   var material = new THREE.MeshStandardMaterial( { 
-    color: 0x0f0f000,
+    color: 0x000000,
   } );
 
   var plane = new THREE.Mesh( geometry, material );
 
   plane.castShadow=true 
   plane.rotation.x=Math.PI*0.5
-  // plane.rotation.x=0
-  plane.position.set(0,-1,-8)
+  plane.position.set(0,0,-8)
   scene.add( plane )
   
 //helper
@@ -138,15 +139,19 @@ const manager = new THREE.LoadingManager();
   // const cameraHelper=new THREE.CameraHelper(5)
   // scene.add(cameraHelper)
 
-  function lerp(x, y, a) {
-    return (1 - a) * x + a * y
-}
+//   function lerp(x, y, a) {
+//     return (1 - a) * x + a * y
+// }
 
 //Gsap
+  const secondId=document.getElementById('second')
+  console.log(secondId.innerText)
+  secondId.style.display="none"
+  console.log(secondId)
   const tl=gsap.timeline({
     scrollTrigger:{
       trigger:'.section2',
-      start:'top center',
+      start:'top bottom',
       end:'bottom bottom',
       markers:true,
       scrub:true,
@@ -157,11 +162,13 @@ const manager = new THREE.LoadingManager();
  
 
  
-  tl.to(camera.position,{z:-11,ease:'power4.easeIn'})
+  tl.to(camera.position,{z:-12,ease:'power4.easeIn'})
   tl.to(plane.rotation,{x:-Math.PI*1})
+  tl.to(secondId.style,{display:'block',ease:'power4.easeIn'})
   tl.to(camera.lookAt,{x:0,y:-1,z:-8,ease:'power4.easeIn'})
+ 
 
-
+console.log(secondId)
 
   // controls
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -175,15 +182,17 @@ const manager = new THREE.LoadingManager();
   controls.enableZoom=false
   controls.autoRotateSpeed=6
 
-console.log(scene)
+// renderer.render(scene,camera)
+
+// console.log(scene)
+  //animation
   const clock = new THREE.Clock()
   function animate() {
     const elapsedTime = clock.getElapsedTime()
 
-    // camera.rotation.z+=2
-    if(gltfObject){
-      gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
-      }
+    // if(gltfObject){
+    //   gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
+    //   }
     controls.update()
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
