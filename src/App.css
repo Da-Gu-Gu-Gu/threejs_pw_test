@@ -14,7 +14,7 @@ canvas {
 }
 
 
-.section,.section2,.section3{
+.section,.section3{
   /* background:transparent; */
   /* border:1px solid blue; */
   width: 100%;
@@ -25,13 +25,24 @@ canvas {
 }
 
 .section2{
+  z-index: 100;
+  /* height:400px; */
+  height: 50vh;
+  padding-left: 5%;
+  padding-right: 5%;
   color:white;
-  /* border:1px solid red; */
+  font-family:'Mukta', sans-serif;
+  font-size: 3rem;
+  text-align: center;
+  border: 1px solid palevioletred;
 }
 
-/* #second{
-  display: none;
-} */
+#center{
+  position: fixed;
+  top:50%;
+  left: 50%;
+  transform: translate(-50% ,-50%);
+}
 
 .section3{
   border:1px solid turquoise;

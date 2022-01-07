@@ -5,10 +5,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 // import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { ScrollTrigger,gsap } from 'gsap/all'
+import SplitText from 'gsap/all'
 
 
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger,SplitText)
 
 const ThreeCanva = () => {
 
@@ -120,18 +121,22 @@ const manager = new THREE.LoadingManager();
 
 
   
-  var geometry = new THREE.PlaneGeometry(14,6);
-  var material = new THREE.MeshStandardMaterial( { 
+  const geometry = new THREE.PlaneGeometry(14,8);
+  const material = new THREE.MeshStandardMaterial( { 
     color: 0x000000,
   } );
 
-  var plane = new THREE.Mesh( geometry, material );
+  const plane = new THREE.Mesh( geometry, material );
 
   plane.castShadow=true 
-  plane.rotation.x=Math.PI*0.5
-  plane.position.set(0,0,-8)
+  plane.rotation.x=-Math.PI*0.5
+  plane.position.set(0,0,8)
   scene.add( plane )
-  
+
+  const Box=new THREE.Mesh(new THREE.BoxBufferGeometry(1,1),new THREE.MeshStandardMaterial())
+  Box.position.set(0,0,20)
+  scene.add(Box)
+
 //helper
   const axesHelper = new THREE.AxesHelper(5)
   scene.add(axesHelper)
@@ -144,15 +149,16 @@ const manager = new THREE.LoadingManager();
 // }
 
 //Gsap
-  const secondId=document.getElementById('second')
-  console.log(secondId.innerText)
-  secondId.style.display="none"
-  console.log(secondId)
+  const text1=document.getElementById('text1')
+  const text2=document.getElementById('text2')
+  text1.style.display="none"
+  text2.style.display="none"
+
   const tl=gsap.timeline({
     scrollTrigger:{
       trigger:'.section2',
-      start:'top bottom',
-      end:'bottom bottom',
+      start:'top 100%',
+      end:'bottom center',
       markers:true,
       scrub:true,
       onEnter:(()=>console.log('enter')),
@@ -160,15 +166,36 @@ const manager = new THREE.LoadingManager();
     }
   })
  
+  // const gsapSplitText = new SplitText("#center", {type: "words"})
 
- 
-  tl.to(camera.position,{z:-12,ease:'power4.easeIn'})
-  tl.to(plane.rotation,{x:-Math.PI*1})
-  tl.to(secondId.style,{display:'block',ease:'power4.easeIn'})
-  tl.to(camera.lookAt,{x:0,y:-1,z:-8,ease:'power4.easeIn'})
- 
+//  const chars = gsapSplitText.chars
 
-console.log(secondId)
+  // tl.to(chars, 2, {opacity:0, y:50, ease:'bounce.easeOut'}, 0.09)
+  tl.to(camera.position,{z:14,ease:'power4.easeIn'})
+  tl.to(plane.rotation,{x:0},2)
+  tl.to(text1.style,{display:'block',ease:'power4.easeIn'})
+  tl.to(text2.style,{display:'block',ease:'power4.easeIn'})
+  tl.to(Box.position,{z:9,ease:'power4.easeIn'})
+  tl.to(camera.lookAt,{x:0,y:0,z:8,ease:'power4.easeIn'})
+  tl.to(text1.style,{display:'none'})
+  tl.to(text2.style,{display:'none'})
+
+  const tl2=gsap.timeline({
+    scrollTrigger:{
+      trigger:'.section3',
+      start:'center bottom',
+      end:'bottom center',
+      markers:true,
+      scrub:true,
+      onEnter:(()=>console.log('enter')),
+      onLeave:(()=>console.log('leave'))
+    }
+  })
+
+
+  tl2.to(camera.position,{x:-15,z:0,ease:'power4.easeIn'})
+  tl2.to(camera.lookAt,{x:0,y:0,z:16,ease:'power3.easeOut'})
+
 
   // controls
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -190,9 +217,11 @@ console.log(secondId)
   function animate() {
     const elapsedTime = clock.getElapsedTime()
 
-    // if(gltfObject){
-    //   gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
-    //   }
+    Box.rotation.z+=0.01
+
+    if(gltfObject){
+      gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
+      }
     controls.update()
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
