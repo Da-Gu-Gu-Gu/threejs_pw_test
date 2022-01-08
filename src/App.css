@@ -34,7 +34,7 @@ canvas {
   font-family:'Mukta', sans-serif;
   font-size: 3rem;
   text-align: center;
-  border: 1px solid palevioletred;
+  /* border: 1px solid palevioletred; */
 }
 
 #center{
@@ -44,9 +44,9 @@ canvas {
   transform: translate(-50% ,-50%);
 }
 
-.section3{
+/* .section3{
   border:1px solid turquoise;
-}
+} */
 
 /* .page{
   width:100vw;

@@ -5,7 +5,7 @@ const Second = () => {
         <div className='section2'>
             <div id="center">
            <div id="text1" >
-               Hello Bois,     
+               Hello Guys,     
            </div>
            <div id="text2">
               I am Hein Htet Aung
