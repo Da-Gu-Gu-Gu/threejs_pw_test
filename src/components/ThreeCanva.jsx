@@ -3,7 +3,9 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { ScrollTrigger,gsap } from 'gsap/all'
-import SplitText from 'gsap/all'
+import locomotiveScroll from 'locomotive-scroll'
+import { DoubleSide } from 'three'
+
 
 
 
@@ -28,6 +30,8 @@ const fragment=`
 uniform float uTime;
 uniform vec3 uColorStart;
 uniform vec3 uColorEnd;
+uniform float uCodeone;
+uniform float uCodetwo;
 
 varying vec2 vUv;
 
@@ -113,15 +117,15 @@ void main(){
     vec2 displaceUv=vUv+cnoise(vec3(vUv*5.0,uTime*0.1));
 
     float strength=cnoise(vec3(displaceUv*5.0,uTime*0.2));
-    gl_FragColor=vec4(0.5,strength,1.0,1.0);
+    gl_FragColor=vec4(uCodeone,strength,uCodetwo,1.0);
 
    
 }
 `
 
-console.log(vertex)
 
-gsap.registerPlugin(ScrollTrigger,SplitText)
+
+gsap.registerPlugin(ScrollTrigger)
 
 const ThreeCanva = () => {
 
@@ -201,12 +205,14 @@ const manager = new THREE.LoadingManager();
 
 
   
-  const geometry = new THREE.PlaneGeometry(14,8);
+  const geometry = new THREE.PlaneGeometry(20,20);
   const material = new THREE.ShaderMaterial( { 
     vertexShader:vertex,
     fragmentShader:fragment,
     uniforms: {
       uTime: { value: 0.0 },
+      uCodeone:{value:0.5},
+      uCodetwo:{value:1.0},
       uColorStart: { value: new THREE.Color('skyblue') },
       uColorEnd: { value: new THREE.Color('#B01EBD') },
   },
@@ -219,9 +225,27 @@ const manager = new THREE.LoadingManager();
   plane.position.set(0,0,8)
   scene.add( plane )
 
-  // const Box=new THREE.Mesh(new THREE.BoxBufferGeometry(1,1),new THREE.MeshStandardMaterial())
-  // Box.position.set(0,0,20)
-  // scene.add(Box)
+
+  const Plane2Material=new THREE.ShaderMaterial({
+    vertexShader:vertex,
+    fragmentShader:fragment,
+    // wireframe:true,
+    // side:DoubleSide,
+    uniforms:{
+      uTime:{value:0.0},
+      uCodeone:{value:1.0},
+      uCodetwo:{value:0.2},
+      uColorStart: { value: new THREE.Color('skyblue') },
+      uColorEnd: { value: new THREE.Color('#B01EBD') },
+    }
+  })
+
+  const Plane2=new THREE.Mesh(geometry,Plane2Material)
+  Plane2.castShadow=true
+  Plane2.rotation.y=Math.PI
+  Plane2.position.set(0,0,-20)
+
+  scene.add(Plane2)
 
 //helper
   // const axesHelper = new THREE.AxesHelper(5)
@@ -230,15 +254,30 @@ const manager = new THREE.LoadingManager();
   // const cameraHelper=new THREE.CameraHelper(5)
   // scene.add(cameraHelper)
 
-//   function lerp(x, y, a) {
-//     return (1 - a) * x + a * y
-// }
+const locoScroll=new locomotiveScroll({
+  el:document.querySelector('.scrollWrap'),
+  smooth:true
+})
+
+// each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
+locoScroll.on(".scrollWrap", ScrollTrigger.update);
+
+// tell ScrollTrigger to use these proxy methods for the ".smooth-scroll" element since Locomotive Scroll is hijacking things
+ScrollTrigger.scrollerProxy(".scrollWrap", {
+  scrollTop(value) {
+    return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+  }, // we don't have to define a scrollLeft because we're only scrolling vertically.
+  getBoundingClientRect() {
+    return {top: 0, left: 0, width: window.innerWidth, height: window.innerHeight};
+  },
+  // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
+  pinType: document.querySelector(".scrollWrap").style.transform ? "transform" : "fixed"
+});
 
 //Gsap
   const text1=document.getElementById('text1')
   const text2=document.getElementById('text2')
-  text1.style.display="none"
-  text2.style.display="none"
+const text3=document.getElementById('center')
 
   const tl=gsap.timeline({
     scrollTrigger:{
@@ -246,34 +285,31 @@ const manager = new THREE.LoadingManager();
       start:'top 100%',
       end:'bottom center',
       // markers:true,
+      scroller: ".scrollWrap",
       scrub:true,
-      onEnter:(()=>console.log('enter')),
-      onLeave:(()=>console.log('leave'))
+      // onEnter:(()=>console.log('enter')),
+      // onLeave:(()=>console.log('leave'))
     }
   })
- 
-  // const gsapSplitText = new SplitText("#center", {type: "words"})
 
-//  const chars = gsapSplitText.chars
-
-  // tl.to(chars, 2, {opacity:0, y:50, ease:'bounce.easeOut'}, 0.09)
   tl.to(camera.position,{z:14,ease:'power4.easeIn'})
-  tl.to(plane.rotation,{x:0},2)
+  tl.to(plane.rotation,{x:0})
   tl.to(text1.style,{display:'block',ease:'power4.easeIn'})
   tl.to(text2.style,{display:'block',ease:'power4.easeIn'})
-  // tl.to(Box.position,{z:9,ease:'power4.easeIn'})
+  tl.to(text3.style,{display:'block',ease:'power4.easeIn'})
   tl.to(camera.lookAt,{x:0,y:0,z:8,ease:'power4.easeIn'})
   tl.to(text1.style,{display:'none'})
   tl.to(text2.style,{display:'none'})
+  tl.to(text3.style,{display:'none'})
   tl.to(camera.position,{z:20,ease:'power4.easeIn'})
-  console.log(window.innerWidth/window.innerHeight)
 
   const tl2=gsap.timeline({
     scrollTrigger:{
       trigger:'.section3',
-      start:'center bottom',
-      end:'bottom center',
+      start:'top bottom',
+      end:'bottom top',
       // markers:true,
+      scroller: ".scrollWrap",
       scrub:true,
       onEnter:(()=>console.log('enter')),
       onLeave:(()=>console.log('leave'))
@@ -281,8 +317,17 @@ const manager = new THREE.LoadingManager();
   })
 
 
-  tl2.to(camera.position,{x:-15,z:0,ease:'power4.easeIn'})
-  tl2.to(camera.lookAt,{x:0,y:0,z:0,ease:'power3.easeOut'})
+  tl2.to(camera.position,{z:-26,ease:'power4.easeIn'})
+  // tl2.to(Plane2.rotation,{x:0})
+  // tl2.to(Plane2.rotation,{y:Math.PI*0.5})
+  tl2.to(camera.lookAt,{x:0,y:0,z:-20,ease:'power3.easeOut'})
+
+
+// each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
+ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+
+// after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
+ScrollTrigger.refresh();
 
 
   // controls
@@ -306,7 +351,7 @@ const manager = new THREE.LoadingManager();
     const elapsedTime = clock.getElapsedTime()
 
     material.uniforms.uTime.value = elapsedTime
-
+    Plane2Material.uniforms.uTime.value=elapsedTime
     // Box.rotation.z+=0.01
 
     if(gltfObject){
