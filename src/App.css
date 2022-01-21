@@ -17,23 +17,36 @@ canvas {
 
 .section,.section3{
   /* background:transparent; */
-  border:1px solid blue;
+  /* border:1px solid blue; */
   width: 100%;
   height: 100vh;
-  
+  /* border:1px solid blue; */
   z-index: 100;
+}
+
+.section{
+  position: relative;
+}
+
+.section h1{
+  position:absolute;
+  top: 50%;
+  font-size: 3rem;
+  color:white;
+  left:50%;
+  transform: translate(-50%,-50%);
 }
 
 .section2{
   z-index: 100;
-  /* height: 100vh; */
-  height: max-content;
+  height: 100vh;
+  /* height: max-content; */
   padding-left: 5%;
   padding-right: 5%;
   padding-top: 75px;
   padding-bottom: 50px;
-  color:white;
-  border: 1px solid palevioletred;
+  color:black;
+  /* border: 1px solid red; */
 }
 
 #text1{
