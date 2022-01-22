@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { ScrollTrigger,gsap } from 'gsap/all'
 import locomotiveScroll from 'locomotive-scroll'
 import { Reflector } from 'three/examples/jsm/objects/Reflector'
-import {GUI} from 'dat.gui' 
+// import {GUI} from 'dat.gui' 
 
 
 
@@ -24,7 +24,7 @@ const ThreeCanva = () => {
   useEffect(()=>{
   const scene=new THREE.Scene()
 
-  const gui=new GUI()
+  // const gui=new GUI()
  
   scene.background = new THREE.Color(0x121212)
  
@@ -157,6 +157,20 @@ ScrollTrigger.scrollerProxy(".scrollWrap", {
   tl.to(camera.position,{y:0.6,delay:1})
   tl.to(camera.position,{z:5.3})
 
+
+  const tl2=gsap.timeline({
+    scrollTrigger:{
+      trigger:'.section3',
+      start:'top 50%',
+      markers:true,
+      scroller: ".scrollWrap",
+     toggleActions:'play none none reverse'
+    }
+  })
+
+  tl2.to(camera.position,{y:0.6,delay:1})
+  tl2.to(camera.position,{z:5.3})
+
  
 
 
@@ -169,24 +183,17 @@ ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
 ScrollTrigger.refresh();
 
 // debugg
-gui.add(camera.position,'x',-10,10,0.1)
-gui.add(camera.position,'y',-10,10,0.1)
-gui.add(camera.position,'z',-10,10,0.1)
+// gui.add(camera.position,'x',-10,20,0.1)
+// gui.add(camera.position,'y',-10,10,0.1)
+// gui.add(camera.position,'z',-10,10,0.1)
 
 // gui.add(camera.lookAt,'x',-10,10,0.1)
 // gui.add(camera.lookAt,'y',-10,10,0.1)
 // gui.add(camera.lookAt,'z',-10,10,0.1)
 
-  // controls
-  // const controls = new OrbitControls(camera, renderer.domElement)
-  // controls.enabled=false
-  // controls.enableDamping = true
-  // controls.maxPolarAngle = Math.PI/3
-  // controls.minPolarAngle = Math.PI/2
-  // controls.minDistance = 1
-  // controls.maxDistance = 50000
-  // controls.enableZoom=false
-  // controls.autoRotateSpeed=6
+// gui.add(pointLight.position,'x',-10,20,0.1)
+// gui.add(pointLight.position,'y',-10,20,0.1)
+// gui.add(pointLight.position,'z',-10,20,0.1)
 
 
 
