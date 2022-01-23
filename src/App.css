@@ -31,7 +31,8 @@ canvas {
 .section h1{
   position:absolute;
   top: 50%;
-  font-size: 3rem;
+  display: flex;
+  font-size: 2rem;
   color:white;
   left:50%;
   transform: translate(-50%,-50%);

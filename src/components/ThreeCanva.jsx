@@ -43,7 +43,7 @@ const ThreeCanva = () => {
   //camera
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   camera.position.set(0,10,7)
-  // camera.lookAt(-5,5,0)
+  
   scene.add(camera)
 
  
@@ -92,6 +92,7 @@ const manager = new THREE.LoadingManager();
       if ( node.isMesh ) { node.castShadow = true; }
 
   } );
+  // camera.lookAt(gltfObject.scene.position)
     scene.add(gltfObject.scene)
     // camera.lookAt(gltfObject.scene.position)
   })
@@ -107,7 +108,7 @@ const manager = new THREE.LoadingManager();
     }
 )
 
-mirror.position.y = -1
+mirror.position.y = -0.8
 mirror.position.z = 1
 mirror.rotation.x = -Math.PI * 0.5
 scene.add(mirror)
@@ -148,13 +149,13 @@ ScrollTrigger.scrollerProxy(".scrollWrap", {
     scrollTrigger:{
       trigger:'.section2',
       start:'top 50%',
-      markers:true,
+      markers:false,
       scroller: ".scrollWrap",
      toggleActions:'play none none reverse'
     }
   })
 
-  tl.to(camera.position,{y:0.6,delay:1})
+  tl.to(camera.position,{y:0.6,delay:0.5})
   tl.to(camera.position,{z:5.3})
 
 
@@ -162,14 +163,21 @@ ScrollTrigger.scrollerProxy(".scrollWrap", {
     scrollTrigger:{
       trigger:'.section3',
       start:'top 50%',
-      markers:true,
+      markers:false,
       scroller: ".scrollWrap",
      toggleActions:'play none none reverse'
     }
   })
 
-  tl2.to(camera.position,{y:0.6,delay:1})
-  tl2.to(camera.position,{z:5.3})
+  // tl2.to(camera.position,{y:0.6,delay:1})
+  // tl2.to(camera.lookAt,{x:0,y:-1,z:1.5})
+  tl2.to(camera.position,{z:7,delay:0.3})
+  tl2.to(camera.position,{x:-7,z:1})
+  tl2.to(camera.position,{x:0,z:-4.3})
+  tl2.to(camera.position,{x:7,z:1.5})
+  tl2.to(camera.position,{x:28,z:5.3})
+  
+
 
  
 

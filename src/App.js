@@ -10,7 +10,7 @@ const App = () => {
 
   return (
     <div>
-      <div className="scrollWrap" style={{border:'1px solid blue'}}>
+      <div className="scrollWrap" >
       <First/>
       <Second/>
       <Third/>
