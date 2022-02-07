@@ -5,8 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { ScrollTrigger,gsap } from 'gsap/all'
 import locomotiveScroll from 'locomotive-scroll'
 import { Reflector } from 'three/examples/jsm/objects/Reflector'
-// import {GUI} from 'dat.gui' 
-
+import {GUI} from 'dat.gui' 
+import {VPlate} from './utils/ThirdPage'
 
 
 
@@ -24,26 +24,24 @@ const ThreeCanva = () => {
   useEffect(()=>{
   const scene=new THREE.Scene()
 
-  // const gui=new GUI()
+  const gui=new GUI()
  
-  scene.background = new THREE.Color(0x121212)
+  scene.background = new THREE.Color(0xffffff)
  
 
 
   //render
-  const renderer = new THREE.WebGLRenderer()
+  const renderer = new THREE.WebGLRenderer({alpha:true})
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFShadowMap
-  renderer.setClearColor(0xffffff)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.outputEncoding = THREE.sRGBEncoding
   montRef.current.appendChild(renderer.domElement)
 
   //camera
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-  camera.position.set(0,10,7)
-  
+  camera.position.set(0,3,7)
   scene.add(camera)
 
  
@@ -51,22 +49,7 @@ const ThreeCanva = () => {
 const ambientLight=new THREE.AmbientLight(0xffbb73,0.5)
 scene.add(ambientLight)
 
-// const spotLight =new THREE.SpotLight({
-//   color:0xffbb73,
-//   intensity:1,
-//   angle:0.6,
-//   distance:5,
-//   penumbra:0.1,
-//   decay:2,
-//   focus:1
-// })
-
-// spotLight.position.set(0,10,-1.5)
-// scene.add(spotLight)
-
-// const spotLightHelper = new THREE.SpotLightHelper( spotLight );
-// scene.add( spotLightHelper );
-
+//pointLight
 const pointLight = new THREE.PointLight( 0xffffff, 1, 1000 );
 pointLight.position.set( -10, 30, 20 );
 pointLight.castShadow = true;
@@ -92,9 +75,9 @@ const manager = new THREE.LoadingManager();
       if ( node.isMesh ) { node.castShadow = true; }
 
   } );
-  // camera.lookAt(gltfObject.scene.position)
+ 
     scene.add(gltfObject.scene)
-    // camera.lookAt(gltfObject.scene.position)
+   
   })
 
   const mirror = new Reflector(
@@ -108,19 +91,24 @@ const manager = new THREE.LoadingManager();
     }
 )
 
-mirror.position.y = -0.8
+mirror.position.y = -0.9
 mirror.position.z = 1
 mirror.rotation.x = -Math.PI * 0.5
 scene.add(mirror)
 
 
- 
+
+
+
 
 //helper
   const axesHelper = new THREE.AxesHelper(5)
   // scene.add(axesHelper)
 
 
+scene.add(VPlate)
+VPlate.rotation.x=Math.PI
+VPlate.position.set(0,1,-14)
 
 const locoScroll=new locomotiveScroll({
   el:document.querySelector('.scrollWrap'),
@@ -142,62 +130,42 @@ ScrollTrigger.scrollerProxy(".scrollWrap", {
   pinType: document.querySelector(".scrollWrap").style.transform ? "transform" : "fixed"
 });
 
-//Gsap
-
-
-  const tl=gsap.timeline({
-    scrollTrigger:{
-      trigger:'.section2',
-      start:'top 50%',
-      markers:false,
-      scroller: ".scrollWrap",
-     toggleActions:'play none none reverse'
-    }
-  })
-
-  tl.to(camera.position,{y:0.6,delay:0.5})
-  tl.to(camera.position,{z:5.3})
-
-
-  const tl2=gsap.timeline({
-    scrollTrigger:{
-      trigger:'.section3',
-      start:'top 50%',
-      markers:false,
-      scroller: ".scrollWrap",
-     toggleActions:'play none none reverse'
-    }
-  })
-
-  // tl2.to(camera.position,{y:0.6,delay:1})
-  // tl2.to(camera.lookAt,{x:0,y:-1,z:1.5})
-  tl2.to(camera.position,{z:7,delay:0.3})
-  tl2.to(camera.position,{x:-7,z:1})
-  tl2.to(camera.position,{x:0,z:-4.3})
-  tl2.to(camera.position,{x:7,z:1.5})
-  tl2.to(camera.position,{x:28,z:5.3})
-  
-
-
- 
-
-
-
-
 // each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
 ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
 
 // after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
 ScrollTrigger.refresh();
 
-// debugg
-// gui.add(camera.position,'x',-10,20,0.1)
-// gui.add(camera.position,'y',-10,10,0.1)
-// gui.add(camera.position,'z',-10,10,0.1)
 
-// gui.add(camera.lookAt,'x',-10,10,0.1)
-// gui.add(camera.lookAt,'y',-10,10,0.1)
-// gui.add(camera.lookAt,'z',-10,10,0.1)
+const tl=gsap.timeline({
+  scrollTrigger:{
+    trigger:'.section2',
+    start:'top center',
+    end:'10% center',
+    markers:true,
+    scroller: ".scrollWrap",
+   toggleActions:'play none none reverse'
+  }
+})
+
+tl.to(camera.position,{y:0.9})
+tl.to(camera.position,{z:7})
+tl.to(camera.position,{z:-5})
+tl.to(VPlate.rotation,{x:0})
+tl.to('.second',{opacity:1,ease: "power1.in",duration:0.4})
+
+// debug
+
+gui.add(mirror.position,'y',-2,2,0.1)
+
+gui.add(camera.position,'x',-10,30,0.1)
+gui.add(camera.position,'y',-10,30,0.1)
+gui.add(camera.position,'z',-10,30,0.1)
+
+
+// gui.add(VPlate.)
+
+
 
 // gui.add(pointLight.position,'x',-10,20,0.1)
 // gui.add(pointLight.position,'y',-10,20,0.1)
@@ -213,12 +181,11 @@ ScrollTrigger.refresh();
 
     // material.uniforms.uTime.value = elapsedTime
     // Plane2Material.uniforms.uTime.value=elapsedTime
-    // Box.rotation.z+=0.01
+
 
     if(gltfObject){
       gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
       }
-    // controls.update()
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
   }
@@ -236,7 +203,7 @@ ScrollTrigger.refresh();
 },[])
 
   return (
-    <div ref={montRef} ></div>
+    <div className='canvas' ref={montRef} ></div>
   )
 }
 

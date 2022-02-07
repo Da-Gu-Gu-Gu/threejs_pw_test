@@ -2,21 +2,19 @@ import React from 'react'
 import ThreeCanva from './components/ThreeCanva'
 import './App.css'
 import First from './components/First'
-import Second from './components/Second'
-import Third from './components/Third'
 import 'locomotive-scroll/dist/locomotive-scroll.css'
+import Second from './components/Second'
 
 const App = () => {
 
   return (
-    <div>
-      <div className="scrollWrap" >
+    <>
+    <div className='scrollWrap'>
       <First/>
-      <Second/>
-      <Third/>
-      </div>
+       <Second/>
+       </div>
       <ThreeCanva/>
-    </div>
+      </>
   )
 }
 
