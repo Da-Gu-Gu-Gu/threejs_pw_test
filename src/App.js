@@ -4,6 +4,7 @@ import './App.css'
 import First from './components/First'
 import 'locomotive-scroll/dist/locomotive-scroll.css'
 import Second from './components/Second'
+import Third from './components/Third'
 
 const App = () => {
 
@@ -12,6 +13,7 @@ const App = () => {
     <div className='scrollWrap'>
       <First/>
        <Second/>
+       <Third/>
        </div>
       <ThreeCanva/>
       </>

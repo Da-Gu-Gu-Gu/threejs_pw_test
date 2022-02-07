@@ -1,11 +1,8 @@
 import React,{useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { ScrollTrigger,gsap } from 'gsap/all'
-import locomotiveScroll from 'locomotive-scroll'
 import { Reflector } from 'three/examples/jsm/objects/Reflector'
-import {GUI} from 'dat.gui' 
 import {VPlate} from './utils/ThirdPage'
 
 
@@ -24,7 +21,6 @@ const ThreeCanva = () => {
   useEffect(()=>{
   const scene=new THREE.Scene()
 
-  const gui=new GUI()
  
   scene.background = new THREE.Color(0xffffff)
  
@@ -110,70 +106,44 @@ scene.add(VPlate)
 VPlate.rotation.x=Math.PI
 VPlate.position.set(0,1,-14)
 
-const locoScroll=new locomotiveScroll({
-  el:document.querySelector('.scrollWrap'),
-  smooth:true
-})
-
-// each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
-locoScroll.on(".scrollWrap", ScrollTrigger.update);
-
-// tell ScrollTrigger to use these proxy methods for the ".smooth-scroll" element since Locomotive Scroll is hijacking things
-ScrollTrigger.scrollerProxy(".scrollWrap", {
-  scrollTop(value) {
-    return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
-  }, // we don't have to define a scrollLeft because we're only scrolling vertically.
-  getBoundingClientRect() {
-    return {top: 0, left: 0, width: window.innerWidth, height: window.innerHeight};
-  },
-  // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
-  pinType: document.querySelector(".scrollWrap").style.transform ? "transform" : "fixed"
-});
-
-// each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
-ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
-
-// after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
-ScrollTrigger.refresh();
 
 
 const tl=gsap.timeline({
   scrollTrigger:{
     trigger:'.section2',
-    start:'top center',
-    end:'10% center',
-    markers:true,
+    start:'top bottom',
+    end:'top center',
+    // scrub:true,
     scroller: ".scrollWrap",
    toggleActions:'play none none reverse'
   }
 })
 
-tl.to(camera.position,{y:0.9})
-tl.to(camera.position,{z:7})
-tl.to(camera.position,{z:-5})
+tl.to(camera.position,{y:0.9,ease: "power1.in",duration:0.7})
+tl.to(camera.position,{z:10,ease: "power1.in",duration:0.7})
+tl.to(camera.position,{z:-5,duration:0.5})
 tl.to(VPlate.rotation,{x:0})
 tl.to('.second',{opacity:1,ease: "power1.in",duration:0.4})
 
+
+const tl2=gsap.timeline({
+  scrollTrigger:{
+    trigger:'.section3',
+    start:'top bottom',
+    end:'top center',
+    scrub:true,
+    scroller: ".scrollWrap",
+   toggleActions:'play none none reverse'
+  }
+})
+
+tl2.to(camera.position,{z:-13,duration:0.5})
+tl2.to('.ptext',{opacity:1,ease:'power2.in',duration:0.5,delay:0.5})
+// tl2.to('.pimg',{height:'50%',ease:'power3.in',duration:0.5})
+
+
 // debug
 
-gui.add(mirror.position,'y',-2,2,0.1)
-
-gui.add(camera.position,'x',-10,30,0.1)
-gui.add(camera.position,'y',-10,30,0.1)
-gui.add(camera.position,'z',-10,30,0.1)
-
-
-// gui.add(VPlate.)
-
-
-
-// gui.add(pointLight.position,'x',-10,20,0.1)
-// gui.add(pointLight.position,'y',-10,20,0.1)
-// gui.add(pointLight.position,'z',-10,20,0.1)
-
-
-
-// console.log(scene)
   //animation
   const clock = new THREE.Clock()
   function animate() {
