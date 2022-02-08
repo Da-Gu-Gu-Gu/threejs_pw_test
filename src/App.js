@@ -5,6 +5,8 @@ import First from './components/First'
 import 'locomotive-scroll/dist/locomotive-scroll.css'
 import Second from './components/Second'
 import Third from './components/Third'
+import Four from './components/Four'
+import Five from './components/Five'
 
 const App = () => {
 
@@ -14,6 +16,8 @@ const App = () => {
       <First/>
        <Second/>
        <Third/>
+       <Four/>
+       <Five/>
        </div>
       <ThreeCanva/>
       </>

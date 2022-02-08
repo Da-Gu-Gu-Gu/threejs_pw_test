@@ -8,7 +8,7 @@ const First = () => {
            <h1 className='hello'> Hello, <br/>
                 <span className='title'>HEIN HTET AUNG</span> 
             </h1>
-            <i>web developer</i>
+            <i>Creative Developer</i>
                  </div>
         </div>
        

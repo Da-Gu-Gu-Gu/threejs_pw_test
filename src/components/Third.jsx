@@ -16,7 +16,9 @@ const Third = () => {
                         </div>
                     </div>
                     <div className='pimg'>
-                        This is img
+                     <div className='pimage'>
+                         
+                     </div>
                     </div>
                 </div>
 
