@@ -7,6 +7,7 @@ import Second from './components/Second'
 import Third from './components/Third'
 import Four from './components/Four'
 import Five from './components/Five'
+import Six from './components/Six'
 
 const App = () => {
 
@@ -18,6 +19,7 @@ const App = () => {
        <Third/>
        <Four/>
        <Five/>
+       <Six/>
        </div>
       <ThreeCanva/>
       </>

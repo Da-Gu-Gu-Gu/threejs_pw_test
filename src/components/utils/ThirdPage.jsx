@@ -93,6 +93,7 @@ void main(){
 `
 
 const Plate=new THREE.PlaneBufferGeometry(5,8)
+// const Plate=new THREE.CircleBufferGeometry(5,8)
 export const PlateMate= new THREE.ShaderMaterial( { 
     vertexShader:vertex,
     fragmentShader:fragment,

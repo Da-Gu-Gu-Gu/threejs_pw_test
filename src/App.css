@@ -4,7 +4,6 @@
   margin: 0;
   padding: 0;
   font-family: 'Bangers', cursive;
-  /* overflow: hidden; */
   scroll-behavior: smooth;
   box-sizing: border-box;
 }
@@ -25,7 +24,7 @@
 
 .section1{
   width: 100%;
-  height: 30vh;
+  height: 100vh;
  z-index: -1;
   position: relative;
 }
@@ -34,14 +33,17 @@
 
 .header{
   position: absolute;
-  top:30%;
+  top:20%;
   width: 100%;
   /* border: 1px solid red; */
   text-align: center;
 }
+i{
+  color:#80b918;
+}
 
 .hello{
-  color: black;
+  color:white;
   letter-spacing: 4px;
 }
 
@@ -54,7 +56,7 @@
 .section2{
   text-align: center;
   width:100%;
-  height: 100vh;
+  height: 30vh;
   position: relative;
 
   background: transparent;
@@ -72,7 +74,7 @@
 .second h1{
   letter-spacing: 4px;
   text-align: center;
-  color: black;
+  color:#f72585;
 
 }
 
@@ -191,6 +193,54 @@
 }
 
 
+.section6{
+  width: 100%;
+  position: relative;
+  height: 100vh;
+}
+
+.contact{
+  overflow: hidden;
+  letter-spacing: -15px;
+  text-align: center;
+  position: absolute;
+  top:30%;
+  opacity: 0;
+  /* border:1px solid red; */
+  color: #ffff00;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.contact p{
+  margin-bottom: 5px;
+}
+
+a{
+  text-decoration: none;
+  color: #ffff00 !important;
+}
+
+
+
+ul {
+  
+  position: absolute;
+  top:60%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%,-50%);
+  margin: auto;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  /* border: 1px solid red; */
+  width: 50%;
+  color: #ffff00 !important;
+  letter-spacing: -10px;
+  justify-content: space-evenly;
+}
+
 @media (max-width:500px){
   .title{
     font-size: 4rem;
@@ -214,5 +264,8 @@
   }
   .pimage,.pimage2,.pimage3{
     top:30%;
+  }
+  .contact{
+    font-size: 0.7rem;
   }
 }

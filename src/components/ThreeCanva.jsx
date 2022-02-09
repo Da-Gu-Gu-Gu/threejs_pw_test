@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { ScrollTrigger,gsap } from 'gsap/all'
 import { Reflector } from 'three/examples/jsm/objects/Reflector'
 import {VPlate,PlateMate} from './utils/ThirdPage'
-
+import {OMesh, OMaterial,Ogeometry} from './utils/Octahedron'
 
 
 
@@ -22,7 +22,7 @@ const ThreeCanva = () => {
   const scene=new THREE.Scene()
 
  
-  scene.background = new THREE.Color(0xffffff)
+  scene.background = new THREE.Color(0x000000)
  
 
 
@@ -81,7 +81,7 @@ const manager = new THREE.LoadingManager();
     {
         clipBias: 0.003,
         color: 0x889999,
-        recursion: 0.2,
+        recursion: 1,
         textureWidth: window.innerWidth * window.devicePixelRatio,
         textureHeight: window.innerHeight * window.devicePixelRatio
     }
@@ -109,6 +109,8 @@ VPlate.rotation.x=Math.PI
 VPlate.position.set(0,1,-14)
 
 
+scene.add(OMesh)
+
 //gsap
 
 const timeline1=gsap.timeline({
@@ -116,7 +118,7 @@ const timeline1=gsap.timeline({
     ease:"SlowMo.easeOut"
   },
   scrollTrigger:{
-    trigger:'.section2',
+    trigger:'.second',
     start:'center center',
     end:'bottom center',
     // markers:true,
@@ -126,10 +128,12 @@ const timeline1=gsap.timeline({
    toggleActions:'play none none reverse'
   }
 })
-timeline1.to('.second',{opacity:1,duration:1})
+
 timeline1.to(camera.position,{y:0.9})
-timeline1.to(camera.position,{z:10,duration:0.3})
-timeline1.to(camera.position,{z:-5,duration:0.7})
+timeline1.to(camera.position,{z:10})
+timeline1.to('.second',{opacity:1,duration:1})
+timeline1.to(camera.position,{z:-5})
+timeline1.to('.second',{opacity:0})
 timeline1.to(VPlate.rotation,{x:0})
 
 
@@ -153,10 +157,11 @@ const timeline2=gsap.timeline({
 
 
 
-timeline2.to(camera.position,{z:-13,duration:1})
-timeline2.to('.ptext',{opacity:1,duration:0.5},'<')
-timeline2.to('.pimage',{height:'300px',duration:0.6},'<')
-timeline2.to('.pimage',{width:'300px',duration:0.7},'<')
+timeline2.to(camera.position,{z:-13})
+timeline2.to(scene,{background:new THREE.Color(0x736fbd),duration:1})
+timeline2.to('.ptext',{opacity:1},'<')
+timeline2.to('.pimage',{height:'300px'},'<')
+timeline2.to('.pimage',{width:'300px'},'<')
 
 
 
@@ -174,11 +179,11 @@ const timeline3=gsap.timeline({
    toggleActions:'play none none reverse'
   }
 })
-timeline3.to(PlateMate.uniforms.uColorStart,{value:0.5,duration:0.5})
-timeline3.to(PlateMate.uniforms.uColorEnd,{value:1.0,duration:0.5},'<')
-timeline3.to('.ptext2',{opacity:1,duration:0.5},'<')
-timeline3.to('.pimage2',{height:'300px',duration:0.5},'<')
-timeline3.to('.pimage2',{width:'300px',duration:0.5},'<')
+timeline3.to(PlateMate.uniforms.uColorStart,{value:0.5})
+timeline3.to(PlateMate.uniforms.uColorEnd,{value:1.0},'<')
+timeline3.to('.ptext2',{opacity:1},'<')
+timeline3.to('.pimage2',{height:'300px'},'<')
+timeline3.to('.pimage2',{width:'300px'},'<')
 
 
 const timeline4=gsap.timeline({
@@ -196,11 +201,37 @@ const timeline4=gsap.timeline({
   }
 })
 
-timeline4.to(PlateMate.uniforms.uColorStart,{value:1.5,duration:0.5})
-timeline4.to(PlateMate.uniforms.uColorEnd,{value:4.0,duration:0.5},'<')
-timeline4.to('.ptext3',{opacity:1,duration:0.5},'<')
-timeline4.to('.pimage3',{height:'300px',duration:0.5},'<')
-timeline4.to('.pimage3',{width:'300px',duration:0.5},'<')
+timeline4.to(PlateMate.uniforms.uColorStart,{value:1.5})
+timeline4.to(PlateMate.uniforms.uColorEnd,{value:4.0},'<')
+timeline4.to('.ptext3',{opacity:1},'<')
+timeline4.to('.pimage3',{height:'300px'},'<')
+timeline4.to('.pimage3',{width:'300px'},'<')
+
+
+const timeline5=gsap.timeline({
+  defaults:{
+    ease:"SlowMo.easeOut"
+  },
+  scrollTrigger:{
+    trigger:'.section6',
+    start:'top top',
+    end:'top top',
+    preventOverlaps:true,
+    fastScrollEnd:true,
+  //  markers:true,
+   toggleActions:'play none none reverse'
+  }
+})
+
+
+timeline5.to(camera.position,{y:1})
+timeline5.to(camera.position,{z:-6})
+timeline5.to(VPlate.rotation,{x:-Math.PI,duration:0.5})
+timeline5.to('.contact',{opacity:1,letterSpacing:'5px',duration:0.5},'<')
+timeline5.to('ul',{opacity:1,letterSpacing:'3px',duration:0.8,delay:0.5},'<')
+timeline5.to(OMaterial,{visible:true})
+timeline5.to(OMesh.position,{y:1,duration:0.5})
+
 
 
 // debug
@@ -212,7 +243,11 @@ timeline4.to('.pimage3',{width:'300px',duration:0.5},'<')
 
     PlateMate.uniforms.uTime.value = elapsedTime
 
-
+    // setTimeout(() => {
+      // Ogeometry.parameters.detail>10?Ogeometry.parameters.detail=0:
+     Ogeometry.parameters.detail+=1
+    //  }, 1000)
+    OMesh.rotation.y+=0.01
     if(gltfObject){
       gltfObject.scene.rotation.y=Math.sin(elapsedTime*0.5)*0.5
       }
