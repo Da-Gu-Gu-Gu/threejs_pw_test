@@ -108,31 +108,37 @@ VPlate.position.set(0,1,-14)
 
 
 //gsap
-const locoScroll=new locomotiveScroll({
-  el:document.querySelector('.scrollWrap'),
-  smooth:true
-})
+// const locoScroll=new locomotiveScroll({
+//   el:document.querySelector('.scrollWrap'),
+//   smooth:true,
+//   smartphone: {
+//     smooth: true
+//   },
+//   tablet: {
+//     smooth: true
+//   }
+// })
 
-// each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
-locoScroll.on(".scrollWrap", ScrollTrigger.update);
+// // each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
+// locoScroll.on(".scrollWrap", ScrollTrigger.update);
 
-// tell ScrollTrigger to use these proxy methods for the ".smooth-scroll" element since Locomotive Scroll is hijacking things
-ScrollTrigger.scrollerProxy(".scrollWrap", {
-  scrollTop(value) {
-    return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
-  }, // we don't have to define a scrollLeft because we're only scrolling vertically.
-  getBoundingClientRect() {
-    return {top: 0, left: 0, width: window.innerWidth, height: window.innerHeight};
-  },
-  // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
-  pinType: document.querySelector(".scrollWrap").style.transform ? "transform" : "fixed"
-});
+// // tell ScrollTrigger to use these proxy methods for the ".smooth-scroll" element since Locomotive Scroll is hijacking things
+// ScrollTrigger.scrollerProxy(".scrollWrap", {
+//   scrollTop(value) {
+//     return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+//   }, // we don't have to define a scrollLeft because we're only scrolling vertically.
+//   getBoundingClientRect() {
+//     return {top: 0, left: 0, width: window.innerWidth, height: window.innerHeight};
+//   },
+//   // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
+//   pinType: document.querySelector(".scrollWrap").style.transform ? "transform" : "fixed"
+// });
 
-// each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
-ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+// // each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
+// ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
 
-// after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
-ScrollTrigger.refresh();
+// // after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
+// ScrollTrigger.refresh();
 
 
 //gsap
@@ -145,7 +151,7 @@ const timeline1=gsap.timeline({
     // markers:true,
     preventOverlaps:true,
     fastScrollEnd:true,
-    scroller: ".scrollWrap",
+    // scroller: ".scrollWrap",
    toggleActions:'play none none reverse'
   }
 })
@@ -167,17 +173,17 @@ const timeline2=gsap.timeline({
     // markers:true,
     preventOverlaps:true,
     fastScrollEnd:true,
-    scroller: ".scrollWrap",
+    // scroller: ".scrollWrap",
    toggleActions:'play none none reverse'
   }
 })
 
 
 
-timeline2.to(camera.position,{z:-13,duration:0.5})
+timeline2.to(camera.position,{z:-13,duration:1})
 timeline2.to('.ptext',{opacity:1,ease:'power2.in',duration:0.5},'<')
-timeline2.to('.pimage',{height:'300px',ease:'power3.in',duration:0.5},'<')
-timeline2.to('.pimage',{width:'300px',ease:'power3.in',duration:0.5},'<')
+timeline2.to('.pimage',{height:'300px',ease:'power3.in',duration:0.6},'<')
+timeline2.to('.pimage',{width:'300px',ease:'power3.in',duration:0.7},'<')
 timeline2.to(PlateMate.uniforms.uColorStart,{value:0.2,ease:'power2.in',duration:0.5},'<')
 timeline2.to(PlateMate.uniforms.uColorEnd,{value:0.2,ease:'power2.in',duration:0.5},'<')
 
@@ -191,7 +197,7 @@ const timeline3=gsap.timeline({
     // markers:true,
     preventOverlaps:true,
     fastScrollEnd:true,
-    scroller: ".scrollWrap",
+    // scroller: ".scrollWrap",
    toggleActions:'play none none reverse'
   }
 })
@@ -212,7 +218,7 @@ const timeline4=gsap.timeline({
     // markers:true,
     preventOverlaps:true,
     fastScrollEnd:true,
-    scroller: ".scrollWrap",
+    // scroller: ".scrollWrap",
    toggleActions:'play none none reverse'
   }
 })
