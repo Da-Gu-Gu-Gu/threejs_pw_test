@@ -87,10 +87,6 @@ float cnoise(vec3 P)
 void main(){
     vec2 displaceUv=vUv+cnoise(vec3(vUv*5.0,uTime*0.1));
     float strength=cnoise(vec3(displaceUv*5.0,uTime*0.2));
-
-    // Final color
-
-
     gl_FragColor = vec4(uColorStart,strength,uColorEnd, 1.0);
    
 }
@@ -102,10 +98,14 @@ export const PlateMate= new THREE.ShaderMaterial( {
     fragmentShader:fragment,
     uniforms: {
       uTime: { value: 0.0 },
-      uColorStart: { value:0.2},
-      uColorEnd: { value: 0.2 },
+      uColorStart: { value:0.0},
+      uColorEnd: { value: 0.0 },
   },
   } );
 
 
 export const VPlate=new THREE.Mesh(Plate,PlateMate)
+
+
+
+
