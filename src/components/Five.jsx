@@ -17,7 +17,7 @@ const Five = () => {
                     </div>
                     <div className='pimg3'>
                      <div className='pimage3'>
-                         
+                         <img src="covid.png" alt="covid" className='covid' />
                      </div>
                     </div>
                 </div>

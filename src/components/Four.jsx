@@ -17,7 +17,7 @@ const Four = () => {
                     </div>
                     <div className='pimg2'>
                      <div className='pimage2'>
-                         
+                         <img src="portal.png" className='portal' alt="portal" />
                      </div>
                     </div>
                 </div>

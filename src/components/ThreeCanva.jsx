@@ -115,7 +115,8 @@ scene.add(OMesh)
 
 const timeline1=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut"
+    ease:"SlowMo.easeOut",
+    stagger:0.5,
   },
   scrollTrigger:{
     trigger:'.second',
@@ -124,15 +125,14 @@ const timeline1=gsap.timeline({
     // markers:true,
     preventOverlaps:true,
     fastScrollEnd:true,
-   
    toggleActions:'play none none reverse'
   }
 })
 
+timeline1.to('.second',{opacity:1,duration:1})
 timeline1.to(camera.position,{y:0.9})
 timeline1.to(camera.position,{z:10})
-timeline1.to('.second',{opacity:1,duration:1})
-timeline1.to(camera.position,{z:-5})
+timeline1.to(camera.position,{z:-5,duration:1})
 timeline1.to('.second',{opacity:0})
 timeline1.to(VPlate.rotation,{x:0})
 
@@ -140,7 +140,8 @@ timeline1.to(VPlate.rotation,{x:0})
 
 const timeline2=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut"
+    ease:"SlowMo.easeOut",
+    stagger:0.5,
   },
   scrollTrigger:{
     trigger:'.section3',
@@ -162,12 +163,14 @@ timeline2.to(scene,{background:new THREE.Color(0x736fbd),duration:1})
 timeline2.to('.ptext',{opacity:1},'<')
 timeline2.to('.pimage',{height:'300px'},'<')
 timeline2.to('.pimage',{width:'300px'},'<')
+timeline2.to('.cf',{rotate:360,duration:1},"<")
 
 
 
 const timeline3=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut"
+    ease:"SlowMo.easeOut",
+    stagger:0.5,
   },
   scrollTrigger:{
     trigger:'.section4',
@@ -184,11 +187,12 @@ timeline3.to(PlateMate.uniforms.uColorEnd,{value:1.0},'<')
 timeline3.to('.ptext2',{opacity:1},'<')
 timeline3.to('.pimage2',{height:'300px'},'<')
 timeline3.to('.pimage2',{width:'300px'},'<')
-
+timeline3.to('.portal',{rotate:-360,duration:1},"<")
 
 const timeline4=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut"
+    ease:"SlowMo.easeOut",
+    stagger:0.5,
   },
   scrollTrigger:{
     trigger:'.section5',
@@ -206,11 +210,12 @@ timeline4.to(PlateMate.uniforms.uColorEnd,{value:4.0},'<')
 timeline4.to('.ptext3',{opacity:1},'<')
 timeline4.to('.pimage3',{height:'300px'},'<')
 timeline4.to('.pimage3',{width:'300px'},'<')
-
+timeline4.to('.covid',{rotate:360,duration:1},"<")
 
 const timeline5=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut"
+    ease:"SlowMo.easeOut",
+    stagger:0.5,
   },
   scrollTrigger:{
     trigger:'.section6',

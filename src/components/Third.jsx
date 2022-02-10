@@ -17,7 +17,7 @@ const Third = () => {
                     </div>
                     <div className='pimg'>
                      <div className='pimage'>
-                         
+                         <img src="cf.png" className='cf' alt="crushfinder"  />
                      </div>
                     </div>
                 </div>
