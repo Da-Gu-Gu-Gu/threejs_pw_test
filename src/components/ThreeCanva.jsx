@@ -1,7 +1,7 @@
 import React,{useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { ScrollTrigger,gsap } from 'gsap/all'
+import { ScrollTrigger,gsap,Power2 } from 'gsap/all'
 import { Reflector } from 'three/examples/jsm/objects/Reflector'
 import {VPlate,PlateMate} from './utils/ThirdPage'
 import {OMesh, OMaterial,Ogeometry} from './utils/Octahedron'
@@ -115,7 +115,7 @@ scene.add(OMesh)
 
 const timeline1=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut",
+    ease:Power2.easeInOut,
     stagger:0.5,
   },
   scrollTrigger:{
@@ -140,7 +140,7 @@ timeline1.to(VPlate.rotation,{x:0})
 
 const timeline2=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut",
+    ease:Power2.easeInOut,
     stagger:0.5,
   },
   scrollTrigger:{
@@ -169,7 +169,7 @@ timeline2.to('.cf',{rotate:360,duration:1},"<")
 
 const timeline3=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut",
+    ease:Power2.easeInOut,
     stagger:0.5,
   },
   scrollTrigger:{
@@ -191,7 +191,7 @@ timeline3.to('.portal',{rotate:-360,duration:1},"<")
 
 const timeline4=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut",
+    ease:Power2.easeInOut,
     stagger:0.5,
   },
   scrollTrigger:{
@@ -214,7 +214,7 @@ timeline4.to('.covid',{rotate:360,duration:1},"<")
 
 const timeline5=gsap.timeline({
   defaults:{
-    ease:"SlowMo.easeOut",
+    ease:Power2.easeInOut,
     stagger:0.5,
   },
   scrollTrigger:{
@@ -228,10 +228,9 @@ const timeline5=gsap.timeline({
   }
 })
 
-
+timeline5.to(VPlate.rotation,{x:-Math.PI})
 timeline5.to(camera.position,{y:1})
 timeline5.to(camera.position,{z:-6})
-timeline5.to(VPlate.rotation,{x:-Math.PI,duration:0.5})
 timeline5.to('.contact',{opacity:1,letterSpacing:'5px',duration:0.5},'<')
 timeline5.to('ul',{opacity:1,letterSpacing:'3px',duration:0.8,delay:0.5},'<')
 timeline5.to(OMaterial,{visible:true})
